@@ -23,12 +23,6 @@ void Vesc::sendPacket(const VescMessage& message) const
     uint16_t crcValue = crc.checksum();
     finalMessage.add<uint16_t>(crcValue);
 
-    for (char c : finalMessage)
-    {
-        std::cout << (static_cast<int>(c) & 0xFF) << std::endl;
-    }
-    std::cout << std::endl;
-
     // send message
     boost::asio::write(*m_serial, boost::asio::buffer(finalMessage.data(), finalMessage.size()));
 }
