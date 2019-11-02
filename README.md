@@ -22,3 +22,7 @@ $ mkdir build && cd build
 $ cmake ..
 $ sudo make -j4 install
 ```
+
+## License
+This Project is licensed under the GPLv3 license.
+For more information see [LICENSE](LICENSE).
