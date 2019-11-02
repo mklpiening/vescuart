@@ -1,0 +1,28 @@
+---
+# We'll use defaults from the LLVM style, but with 4 columns indentation.
+BasedOnStyle: LLVM
+IndentWidth: 4
+---
+Language: Cpp
+
+ReflowComments: true
+SortIncludes: true
+SortUsingDeclarations: true
+AlignAfterOpenBracket: Align
+AlignOperands: true
+AlignConsecutiveAssignments: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AlwaysBreakAfterReturnType: None
+AlwaysBreakTemplateDeclarations: Yes
+AlignTrailingComments: true
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Allman
+BreakBeforeBinaryOperators: All
+ColumnLimit: 100
+DerivePointerAlignment: false
+IncludeBlocks: Regroup
+PointerAlignment: Left
