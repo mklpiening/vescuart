@@ -29,9 +29,9 @@ add_library(vescuart SHARED ${VESCUART_SOURCES})
 target_link_libraries(vescuart
     ${Boost_LIBRARIES})
 
-#add_library(vescuart_static STATIC ${VESCUART_SOURCES})
-#target_link_libraries(vescuart_static
-#    ${Boost_LIBRARIES})
+add_library(vescuart_static STATIC ${VESCUART_SOURCES})
+target_link_libraries(vescuart_static
+    ${Boost_LIBRARIES})
 
 
 ###################
