@@ -1,21 +1,25 @@
 cmake_minimum_required(VERSION 2.8)
 project(vescuart)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED COMPONENTS 
+    system 
+    thread)
 
 ###########
 # library #
 ###########
 
 set(VESCUART_SOURCES
-    src/VescUart.cpp
+    src/Vesc.cpp
+    src/VescMessage.cpp
+    src/VescMotor.cpp
 )
 
 include_directories(include
@@ -25,16 +29,16 @@ add_library(vescuart SHARED ${VESCUART_SOURCES})
 target_link_libraries(vescuart
     ${Boost_LIBRARIES})
 
-add_library(vescuart_static STATIC ${VESCUART_SOURCES})
-target_link_libraries(vescuart_static
-    ${Boost_LIBRARIES})
+#add_library(vescuart_static STATIC ${VESCUART_SOURCES})
+#target_link_libraries(vescuart_static
+#    ${Boost_LIBRARIES})
 
 
 ###################
 # install library #
 ###################
 
-install(TARGETS vescuart vescuart_static
+install(TARGETS vescuart
         EXPORT vescuartTargets
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
