@@ -22,13 +22,7 @@ Vesc::Vesc(std::string port, int baudrate)
 
 void Vesc::sendPacket(const VescMessage& message) const
 {
-    VescMessage finalMessage = message;
-
-    // calculate crc
-    boost::crc_16_type crc;
-    crc.process_bytes(finalMessage.data(), finalMessage.size());
-    uint16_t crcValue = crc.checksum();
-    finalMessage.add<uint16_t>(crcValue);
+    VescMessage finalMessage = message.finalize();
 
     // send message
     boost::asio::write(*m_serial, boost::asio::buffer(finalMessage.data(), finalMessage.size()));

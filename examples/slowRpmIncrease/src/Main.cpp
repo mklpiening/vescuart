@@ -17,9 +17,9 @@ int main(int argc, char** argv)
 
     // get parameters
     std::string port = argv[1];
-    int baudrate = std::stoi(argv[2]);
+    int baudrate     = std::stoi(argv[2]);
     std::cout << "using vesc " << port << " with baudrate " << baudrate << std::endl;
-    
+
     std::optional<int> canId = std::nullopt;
     if (argc == 4)
     {

@@ -100,7 +100,7 @@ class VescMessage : public std::vector<uint8_t>
     /**
      * @param type type of message that will be used as the first byte of the message
      */
-    VescMessage(VescMessageType type);
+    VescMessage(VescMessageType type, std::optional<int> canId);
 
     /**
      * @brief adds a datatype to this message
@@ -117,12 +117,16 @@ class VescMessage : public std::vector<uint8_t>
      */
     void addMessageType(VescMessageType type);
 
+    void addCRC();
+
     /**
      * @brief adds postfix to forward all can messages to VESC with given can id if id is given
      *
      * @param canId can id of receiving VESC
      */
     void addForwardCan(std::optional<int> canId);
+
+    VescMessage finalize() const;
 };
 
 #include "vescuart/VescMessage.tcc"

@@ -17,10 +17,8 @@ VescMotor::VescMotor(Vesc::Ptr vesc, std::optional<int> canId)
 
 void VescMotor::setRpm(int rpm)
 {
-    VescMessage message(VescMessageType::setRpm);
+    VescMessage message(VescMessageType::setRpm, m_canId);
     message.add<int32_t>(static_cast<int32_t>(rpm));
-    
-    message.addForwardCan(m_canId);
 
     m_vesc->sendPacket(message);
 }
