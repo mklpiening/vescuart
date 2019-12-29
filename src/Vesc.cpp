@@ -7,25 +7,75 @@ namespace vescuart
 {
 
 Vesc::Vesc(std::string port, int baudrate)
-    : m_io(std::make_unique<boost::asio::io_service>()),
-      m_serial(std::make_unique<boost::asio::serial_port>(*m_io, port))
+    : m_port(port), m_baudrate(baudrate), m_io(), m_serial(m_io)
 {
-    m_serial->set_option(boost::asio::serial_port_base::baud_rate(baudrate));
+    // try opening serial port
+    connect();
 
-    // wait for connection
-    sleep(2);
     listenUart();
 
-    boost::thread t(boost::bind(&boost::asio::io_service::run, m_io.get()));
+    boost::thread t(boost::bind(&boost::asio::io_service::run, &m_io));
     m_ioThread.swap(t);
 }
 
-void Vesc::sendPacket(const VescMessage& message) const
+Vesc::~Vesc()
 {
+    m_io.stop();
+}
+
+bool Vesc::isConnected() const
+{
+    return m_serial.is_open();
+}
+
+bool Vesc::connect()
+{
+    if (m_serial.is_open())
+    {
+        return true;
+    }
+
+    try
+    {
+        boost::system::error_code ec;
+        m_serial.open(m_port, ec);
+        m_serial.set_option(boost::asio::serial_port_base::baud_rate(m_baudrate));
+
+        return !ec;
+    }
+    catch (const boost::system::system_error& exception)
+    {
+    }
+
+    return false;
+}
+
+bool Vesc::sendPacket(const VescMessage& message)
+{
+    // check if serial port is open
+    if (!m_serial.is_open())
+    {
+        if (!connect())
+        {
+            return false;
+        }
+    }
+
+    // finish buuilding message
     VescMessage finalMessage = message.finalize();
 
     // send message
-    boost::asio::write(*m_serial, boost::asio::buffer(finalMessage.data(), finalMessage.size()));
+    try
+    {
+        boost::asio::write(m_serial, boost::asio::buffer(finalMessage.data(), finalMessage.size()));
+    }
+    catch (const boost::system::system_error& exception)
+    {
+        m_serial.close();
+        return false;
+    }
+
+    return true;
 }
 
 void Vesc::uartCallback(const boost::system::error_code& error, std::size_t bytes_transferred)
@@ -38,11 +88,11 @@ void Vesc::uartCallback(const boost::system::error_code& error, std::size_t byte
 
 void Vesc::listenUart()
 {
-    m_serial->async_read_some(boost::asio::buffer(m_receiveBuffer, 16),
-                              boost::bind(&Vesc::uartCallback,
-                                          this,
-                                          boost::asio::placeholders::error,
-                                          boost::asio::placeholders::bytes_transferred));
+    m_serial.async_read_some(boost::asio::buffer(m_receiveBuffer, 16),
+                             boost::bind(&Vesc::uartCallback,
+                                         this,
+                                         boost::asio::placeholders::error,
+                                         boost::asio::placeholders::bytes_transferred));
 }
 
 } // namespace vescuart

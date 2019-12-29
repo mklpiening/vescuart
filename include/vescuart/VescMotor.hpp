@@ -25,14 +25,15 @@ class VescMotor
      * @brief sets the rpm of the motor
      *
      * @param rpm rpm to be applied
+     * @return true if message has been sent
      */
-    void setRpm(int rpm);
+    bool setRpm(int rpm);
 
   private:
     std::shared_ptr<Vesc> m_vesc;
     std::optional<int> m_canId;
 };
 
-}
+} // namespace vescuart
 
 #endif

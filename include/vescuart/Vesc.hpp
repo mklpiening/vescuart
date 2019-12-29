@@ -21,16 +21,36 @@ class Vesc
      */
     Vesc(std::string port, int baudrate);
 
+    ~Vesc();
+
+    /**
+     * @brief checks if the serial port is connected
+     *
+     * @return true if connection is open, else false
+     */
+    bool isConnected() const;
+
+    /**
+     * @brief tries ot open the serial port
+     *
+     * @return true if the connnection is open, else false
+     */
+    bool connect();
+
     /**
      * @brief sends a message to the configured device
      *
-     * @param message message to send 
+     * @param message message to send
+     *
+     * @return true if successful, false if connection is not open
      */
-    void sendPacket(const VescMessage& message) const;
+    bool sendPacket(const VescMessage& message);
 
   private:
-    std::unique_ptr<boost::asio::io_service> m_io;
-    std::unique_ptr<boost::asio::serial_port> m_serial;
+    std::string m_port;
+    int m_baudrate;
+    boost::asio::io_service m_io;
+    boost::asio::serial_port m_serial;
     boost::thread m_ioThread;
 
     uint8_t m_receiveBuffer[16];

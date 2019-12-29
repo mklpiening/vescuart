@@ -35,15 +35,27 @@ int main(int argc, char** argv)
     // apply speeds
     for (int i = 0; i < 5000; i += 20)
     {
-        motor.setRpm(i);
-        std::cout << "setting rpm to " << i << " ...     " << '\r' << std::flush;
+        if (motor.setRpm(i))
+        {
+            std::cout << "setting rpm to " << i << " ...       " << '\r' << std::flush;
+        }
+        else
+        {
+            std::cout << "ERROR setting rpm to " << i << " !       " << '\r' << std::flush;
+        }
         usleep(50000);
     }
 
     for (int i = 5000; i >= 0; i -= 20)
     {
-        motor.setRpm(i);
-        std::cout << "setting rpm to " << i << " ...     " << '\r' << std::flush;
+        if (motor.setRpm(i))
+        {
+            std::cout << "setting rpm to " << i << " ...       " << '\r' << std::flush;
+        }
+        else
+        {
+            std::cout << "ERROR setting rpm to " << i << " !       " << '\r' << std::flush;
+        }
         usleep(50000);
     }
 

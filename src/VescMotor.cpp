@@ -10,17 +10,14 @@ VescMotor::VescMotor(std::string port, int baudrate)
 {
 }
 
-VescMotor::VescMotor(Vesc::Ptr vesc, std::optional<int> canId)
-    : m_vesc(vesc), m_canId(canId)
-{
-}
+VescMotor::VescMotor(Vesc::Ptr vesc, std::optional<int> canId) : m_vesc(vesc), m_canId(canId) {}
 
-void VescMotor::setRpm(int rpm)
+bool VescMotor::setRpm(int rpm)
 {
     VescMessage message(VescMessageType::setRpm, m_canId);
     message.add<int32_t>(static_cast<int32_t>(rpm));
 
-    m_vesc->sendPacket(message);
+    return m_vesc->sendPacket(message);
 }
 
 } // namespace vescuart
