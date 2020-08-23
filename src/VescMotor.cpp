@@ -20,4 +20,41 @@ bool VescMotor::setRpm(int rpm)
     return m_vesc->sendPacket(message);
 }
 
+bool VescMotor::setDutyCycle(int dutyCycle)
+{
+    VescMessage message(VescMessageType::setDuty, m_canId);
+    message.add<int32_t>(static_cast<int32_t>(dutyCycle));
+
+    return m_vesc->sendPacket(message);
+}
+
+bool VescMotor::setCurrent(int current)
+{
+    VescMessage message(VescMessageType::setCurrent, m_canId);
+    message.add<int32_t>(static_cast<int32_t>(current));
+
+    return m_vesc->sendPacket(message);
+}
+
+bool VescMotor::setBrakeCurrent(int current)
+{
+    VescMessage message(VescMessageType::setCurrentBrake, m_canId);
+    message.add<int32_t>(static_cast<int32_t>(current));
+
+    return m_vesc->sendPacket(message);
+}
+
+bool VescMotor::setPosition(float angle)
+{
+    VescMessage message(VescMessageType::setPos, m_canId);
+    message.add<float, int32_t>(angle, 1000000);
+
+    return m_vesc->sendPacket(message);
+}
+
+bool VescMotor::requestValues() {
+    VescMessage message(VescMessageType::getValues, m_canId);
+
+    return m_vesc->sendPacket(message);
+}
 } // namespace vescuart

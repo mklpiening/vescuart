@@ -3,6 +3,7 @@
 
 #include <optional>
 #include <vector>
+#include <stdint.h>
 
 namespace vescuart
 {
@@ -110,6 +111,15 @@ class VescMessage : public std::vector<uint8_t>
     template <typename T>
     void add(T data);
 
+    template <typename T, typename U>
+    void add(T data, float scale);
+
+    template <typename T>
+    T get();
+
+    template <typename T, typename U>
+    T get(float scale);
+
     /**
      * @brief appends a message type to the message
      *
@@ -117,9 +127,14 @@ class VescMessage : public std::vector<uint8_t>
      */
     void addMessageType(VescMessageType type);
 
+    /**
+     * @brief adds crc to message
+     */
     void addCRC();
 
-    /**
+    bool checkCRC();
+
+    /*
      * @brief adds postfix to forward all can messages to VESC with given can id if id is given
      *
      * @param canId can id of receiving VESC

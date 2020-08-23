@@ -82,6 +82,7 @@ void Vesc::uartCallback(const boost::system::error_code& error, std::size_t byte
 {
     if (!error && bytes_transferred > 0)
     {
+        std::cout << bytes_transferred << std::endl;
     }
     listenUart();
 }

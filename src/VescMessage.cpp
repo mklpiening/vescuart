@@ -39,6 +39,21 @@ void VescMessage::addCRC()
     add<uint16_t>(cksum);
 }
 
+bool VescMessage::checkCRC()
+{
+    // load old checksum
+    unsigned short cksum = 0;
+    cksum |= at(size() - 2) << 8;
+    cksum |= at(size() - 1);
+
+    pop_back();
+    pop_back();
+
+    // TODO: check crc
+
+    return true;
+}
+
 VescMessage::VescMessage(VescMessageType type, std::optional<int> canId)
 {
     addForwardCan(canId);

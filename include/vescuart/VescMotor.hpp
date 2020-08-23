@@ -29,6 +29,19 @@ class VescMotor
      */
     bool setRpm(int rpm);
 
+    // -100000 to 100000
+    bool setDutyCycle(int dutyCycle);
+
+    // milliamps
+    bool setCurrent(int current);
+
+    // milliamps whem braking
+    bool setBrakeCurrent(int current);
+
+    bool setPosition(float angle);
+
+    bool requestValues();
+
   private:
     std::shared_ptr<Vesc> m_vesc;
     std::optional<int> m_canId;
